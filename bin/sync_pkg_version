@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+require 'json'
+
+pkg_root = File.expand_path('..', __dir__)
+version_file = File.join(pkg_root, 'VERSION')
+pkg_config_file = File.join(pkg_root, 'package.json')
+pkg_config = JSON.parse(File.read(pkg_config_file))
+
+File.write(version_file, <<~DATA
+  #{pkg_config['version']}
+DATA
+)

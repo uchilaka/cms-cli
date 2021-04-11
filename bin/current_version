@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+require 'json'
+
+pkg_root = File.expand_path('..', __dir__)
+pkg_config_file = File.join(pkg_root, 'package.json')
+
+raise ArgumentError, "invalid package file: #{pkg_config_file}" \
+  unless File.exist?(pkg_config_file) && /package\.json$/ =~ pkg_config_file
+
+pkg_config = JSON.parse(File.read(pkg_config_file))
+
+printf pkg_config['version']

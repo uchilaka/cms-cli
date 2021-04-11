@@ -1,0 +1,24 @@
+{
+  "name": "@larcity/cms-cli",
+  "version": "0.354.2-alpha.2",
+  "description": "A CLI tool for managing LarCity's (Strapi) CMS project. Written in Ruby",
+  "main": "bin/cms-cli",
+  "engines": {
+    "node": ">=12.22.1 <13",
+    "npm": ">=6 <7"
+  },
+  "scripts": {
+    "changelog": "auto-changelog --output md/CHANGELOG.md --template keepachangelog",
+    "sync:version": "bin/sync_pkg_version",
+    "prebuild": "yarn sync:version",
+    "build": "gem build cms-cli.gemspec -C dist",
+    "postbuild": "mkdir -p builds && mv -v cms-cli*.gem builds/",
+    "rubocop:fix": "rubocop -c .rubocop.yml -a"
+  },
+  "author": "Uche Chilaka<uche@lar.city>",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "auto-changelog": "^2.2.1"
+  }
+}

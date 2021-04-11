@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+require_relative '../lib/cms-cli'
+require_relative '../lib/commands/database'
+require_relative '../lib/command_result'
+
+# @Todo use a semantic logger that's compatible with Rollbar
+# Thor guide: http://whatisthor.com/
+module CmsCli
+  class Database < CommandResult
+    # # Backup
+    # desc "database backup", "Backs up the CMS database"
+    # option :app_dir, type: :string, aliases: [:a]
+    # def backup
+    #   puts "Will attempt to backup database"
+    # end
+    #
+    option :verbose, type: :boolean, aliases: [:v], default: false
+    option :dry_run, type: :boolean, aliases: [:noop], default: false
+    desc 'database SUBCOMMAND ...ARGS', 'Complete database management tasks'
+    subcommand 'database', CmsCli::Commands::Database
+  end
+end
+
+CmsCli::Database.start(ARGV)

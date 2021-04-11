@@ -1,0 +1,89 @@
+## Global settings here
+atlas:
+  user: <%= ENV['_ATLAS_ADMIN_USER'] %>
+  pass: <%= ENV['_ATLAS_ADMIN_PASS'] %>
+
+# Migration playbook (will likely be deprecated)
+migration:
+  restore:
+    api: # model deployment scripting
+    - name: project
+      config: models/project.settings.json
+      tasks:
+      - name: Delete project attributes
+        action: delete
+        attributes:
+        - apps
+    - name: app
+      config: models/app.settings.json
+      tasks:
+      - name: Delete app attributes
+        action: delete
+        attributes:
+        - project
+        - services
+    - name: service
+      config: models/service.settings.json
+      tasks:
+      - name: Delete service attributes
+        action: delete
+        attributes:
+        - app
+        - ingress
+    - name: ingress
+      config: models/ingress.settings.json
+      tasks:
+      - name: Delete ingress attributes
+        action: delete
+        attributes:
+        - ipAddresses
+        - service
+    - name: static-ip
+      config: models/static-ip.settings.json
+      tasks:
+      - name: Delete static IP attributes
+        action: delete
+        attributes:
+        - ingresses
+  # Bootstrap steps run one at a time, and exit after running the next "due" step
+  # @Todo log should output progress and the next step due to run (along with instructions
+  #  to wait until a confirmed service restart for the next execution)
+  bootstrap:
+    - name: app
+      config: models/app.settings.json
+      attributes:
+      - project # @important: delete "via" mapping, and restore after assoc model is restored
+    - name: project
+      config: models/project.settings.json
+      attributes:
+      - apps
+      dominant: true
+    - name: service
+      config: models/service.settings.json
+      attributes:
+      - app # @important: delete "via" mapping, and restore after assoc model is restored
+    - name: app
+      config: models/app.settings.json
+      attributes:
+      - services
+      dominant: true
+    - name: ingress
+      config: models/ingress.settings.json
+      attributes:
+      - service # @important: delete "via" mapping, and restore after assoc model is restored
+    - name: service
+      config: models/service.settings.json
+      attributes:
+      - ingress
+      dominant: true
+    - name: ingress
+      config: models/ingress.settings.json
+      attributes:
+      - ipAddress # @important: delete "via" mapping, and restore after assoc model is restored
+    - name: static-ip
+      config: models/static-ip.settings.json
+      attributes:
+      - ingresses
+      dominant: true
+
+  stage: null # Not yet supported
