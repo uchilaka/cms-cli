@@ -1,5 +1,5 @@
 {
-  "name": "@larcity/cms-cli",
+  "name": "@larcity/cms-cli-gem",
   "version": "0.354.2-alpha.2",
   "description": "A CLI tool for managing LarCity's (Strapi) CMS project. Written in Ruby",
   "main": "bin/cms-cli",
